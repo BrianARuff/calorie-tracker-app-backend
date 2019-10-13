@@ -13,6 +13,35 @@ app.listen(process.env.PORT || 3001, () =>
   )
 );
 
+// error handler
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500);
+  switch (res.statusCode) {
+    case 500:
+      res
+        .json({
+          message: err.message,
+          status: res.statusCode,
+          info: "Server Error has Occurred"
+        })
+        .end();
+    case 404:
+      res
+        .json({
+          message: err.message,
+          status: res.statusCode,
+          info: "Resource or Resources were not Found"
+        })
+        .end();
+    default:
+      res.json({
+        message: err.message,
+        status: 500,
+        info: "Default Error Message"
+      });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send(`
     <!DOCTYPE html>
