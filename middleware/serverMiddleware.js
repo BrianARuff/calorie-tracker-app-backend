@@ -7,6 +7,7 @@ const express = require("express");
 
 // routes
 const userRoutes = require("../routes/userRoutes");
+const authRoutes = require("../routes/authRoutes");
 
 const middleWare = server => {
   server.use(express.json({ limit: "10mb" }));
@@ -14,6 +15,7 @@ const middleWare = server => {
   server.use(helmet());
   server.use(morgan("dev"));
   server.use("/users", userRoutes);
+  server.use("/auth", authRoutes);
   // error handler middleware
   server.use((err, req, res, next) => {
     res.status(err.statusCode || 500);
