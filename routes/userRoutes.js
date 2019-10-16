@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const router = require("express").Router();
 const database = require("../db/database");
 const validator = require("validator");
