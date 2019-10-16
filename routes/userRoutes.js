@@ -17,6 +17,33 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+router.get("/name/:username", async (req, res, next) => {
+  const { username } = req.params;
+  console.log(username);
+  try {
+    const user = await database.query(
+      "select * from users where username = $1;",
+      [username]
+    );
+
+    if (!Object(user.rows[0]).hasOwnProperty("id")) {
+      next(new Error("User record not found"));
+    }
+    const limitedUserData = {
+      id: user.rows[0].id,
+      username: user.rows[0].username,
+      age: user.rows[0].age,
+      height: user.rows[0].height,
+      starting_weight: user.rows[0].starting_weight,
+      current_weight: user.rows[0].current_weight,
+      goal_weight: user.rows[0].goal_weight
+    };
+    res.status(200).json(limitedUserData);
+  } catch (error) {
+    next(new Error(error));
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const {
     username,

@@ -64,11 +64,7 @@ router.post("/register", async (req, res, next) => {
         next(new Error("Account was not created"));
       }
     } else {
-      next(
-        new Error(
-          "Please ensure that you provided a username, password, email, age, height, your starting and goal weight to continue."
-        )
-      );
+      next(new Error("Please fill in the fields outlined in red below."));
     }
   } catch (error) {
     next(new Error(error));
@@ -139,7 +135,6 @@ router.patch("/logout", async (req, res, next) => {
 
 router.post("/validate", async (req, res, next) => {
   const { username } = req.body;
-  console.log(req.body.username);
   try {
     await database.query(
       "UPDATE users SET isauthenticated = $1 WHERE username = $2",

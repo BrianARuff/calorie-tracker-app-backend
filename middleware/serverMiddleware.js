@@ -4,14 +4,26 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 // routes
 const userRoutes = require("../routes/userRoutes");
 const authRoutes = require("../routes/authRoutes");
 
 const middleWare = server => {
+  // session setup
   server.use(express.json({ limit: "10mb" }));
   server.use(cors());
+  server.use(cookieParser());
+  server.use(
+    session({
+      cookie: { maxAge: 1000 * 60 * 60 * 24 },
+      secret: process.env.COOKIE_SECRET,
+      resave: true,
+      saveUninitialized: true
+    })
+  );
   server.use(helmet());
   server.use(morgan("dev"));
   server.use("/users", userRoutes);
